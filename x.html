@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashing Background</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        animation: flashBackground 1s infinite;
+      }
+      .img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        height: 80px;
+        width: 80px;
+        overflow: hidden;
+        border-radius: 50%;
+      }
+      .img.active {
+        animation: spinAndGrow 1s forwards;
+        animation-timing-function: ease-in-out;
+      }
+      h1:has(+ #videoFrame ) {
+        position: fixed;
+        font-weight: bold;
+        align-self: center;
+        color: rgb(97, 161, 207);
+        -webkit-text-stroke:#d65e5e 1px;
+        animation: grow 2s linear infinite;
+        bottom: 200px;
+
+      }
+      .img.in-active {
+        animation-direction: reverse;
+      }
+
+      div:has(> iframe#videoFrame) {
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        bottom: 0;
+        right: 0;
+      }
+      @keyframes grow {
+  0% {
+    font-size: 1em;
+  }
+  50% {
+    font-size: 2em;
+  }
+  100% {
+    font-size: 1em;
+  }
+}
+      @keyframes spinAndGrow {
+        from {
+          transform: rotate(0deg) scale(1);
+        }
+        25% {
+          transform: rotate(720deg) scale(2);
+        }
+        50% {
+          transform: rotate(1440deg) scale(3);
+        }
+        75% {
+          transform: rotate(210deg) scale(4);
+        }
+        to {
+          transform: rotate(2880deg) scale(5);
+        }
+      }
+      @keyframes flashBackground {
+        0% {
+          background-color: #ff0000; /* Red */
+        }
+        25% {
+          background-color: #00ff00; /* Green */
+        }
+        50% {
+          background-color: #0000ff; /* Blue */
+        }
+        75% {
+          background-color: #ffff00; /* Yellow */
+        }
+        100% {
+          background-color: #ff00ff; /* Magenta */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="img">
+      <img src="xeko.jpg" width="80px" />
+    </div>
+    <div>
+      <h1>Play me!</h1>
+      <iframe id="videoFrame" src="https://drive.google.com/file/d/1Jjg2Wle0aESJaa7V1DXa9-gdn--JW5pL/preview" width="200" height="200" allow="autoplay" ></iframe> 
+    </div>
+  </body>
+  <script>
+    let item = document.querySelector(".img");
+
+    // play normal
+    item.addEventListener("mouseover", () => {
+      item.classList.add("active");
+    });
+
+    // play in reverse
+    item.addEventListener("mouseout", () => {
+      item.style.opacity = 0; // avoid showing the init style while switching the 'active' class
+
+      item.classList.add("in-active");
+      item.classList.remove("active");
+
+      // force dom update
+      setTimeout(() => {
+        item.classList.add("active");
+        item.style.opacity = "";
+      }, 5);
+
+      item.addEventListener("animationend", onanimationend);
+    });
+
+  </script>
+</html>
